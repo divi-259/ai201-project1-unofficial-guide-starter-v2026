@@ -21,6 +21,10 @@
 
 ## What This Does
 
+I picked the default corpus - "campus_life", which has 88 documents in total. 
+Each document has 4-5 lines talking about a topic related to campus life - courses, grading, library, transit etc.
+We can ask the system the questions a student is likely to ask their peers or seniors in the campus.
+
 <!-- Three or four sentences. Which corpus you picked, and the kinds of
      questions your system answers. Write it for someone who has never seen
      this repo.
