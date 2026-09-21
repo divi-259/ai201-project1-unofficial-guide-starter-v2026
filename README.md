@@ -123,10 +123,19 @@ Laundry costs $1.75 wash, $1.75 dry, app-based. On noise: moderate; the building
      visible. Milestone 4. -->
 
 **Question:**
-
+"What it is like to study abroad?"
 **Answer:**
 
 ```
+(best distance 0.538, cutoff 0.6)
+
+Based on the provided documents, the single most misunderstood fact about the study abroad programme is that your financial aid package travels with you, which leads most students to mistakenly assume it does not and rule themselves out. Applications open in October for the following academic year.
+
+Source: admin_study_abroad.txt
+
+Sources retrieved: admin_graduation_requirements.txt, admin_study_abroad.txt, course_engl_205.txt, course_hist_118.txt, money_jobs.txt
+
+1 model calls this session, 632 tokens (570 in, 62 out)
 ```
 
 **My relevance cutoff:**
@@ -140,9 +149,30 @@ Laundry costs $1.75 wash, $1.75 dry, app-based. On noise: moderate; the building
 
      Milestone 4. -->
 
-| Question | In corpus? | Best distance |
-|---|---|---|
-|  |  |  |
+┌─────────────────────────────────────────────────────────────┬────────────┬───────────────┐
+│                          Question                           │ In corpus? │ Best distance │
+├─────────────────────────────────────────────────────────────┼────────────┼───────────────┤
+│ How do I book a study room?                                 │ Yes        │ 0.337         │
+├─────────────────────────────────────────────────────────────┼────────────┼───────────────┤
+│ What is the assessment criteria for BIOL160?                │ Yes        │ 0.401         │
+├─────────────────────────────────────────────────────────────┼────────────┼───────────────┤
+│ What are the graduation requirements?                       │ Yes        │ 0.327         │
+├─────────────────────────────────────────────────────────────┼────────────┼───────────────┤
+│ What are the hours for the health center?                   │ Yes        │ 0.318         │
+├─────────────────────────────────────────────────────────────┼────────────┼───────────────┤
+│ What are the walking times across campus?                   │ Yes        │ 0.331         │
+├─────────────────────────────────────────────────────────────┼────────────┼───────────────┤
+│ What is the capital of Mongolia?                            │ No         │ 0.825         │
+├─────────────────────────────────────────────────────────────┼────────────┼───────────────┤
+│ How do I change the oil in a diesel engine?                 │ No         │ 0.934         │
+├─────────────────────────────────────────────────────────────┼────────────┼───────────────┤
+│ Who won the 1994 World Cup?                                 │ No         │ 0.886         │
+├─────────────────────────────────────────────────────────────┼────────────┼───────────────┤
+│ What is the recommended dosage of ibuprofen for a headache? │ No         │ 0.844         │
+├─────────────────────────────────────────────────────────────┼────────────┼───────────────┤
+│ How do I write a for loop in Rust?                          │ No         │ 0.896         │
+└─────────────────────────────────────────────────────────────┴────────────┴─────────-------
+In corpus questions have max best distance 0.4 and out of corpus questions have best distance greater than 0.8
 
 ## How I Used AI
 
@@ -156,8 +186,10 @@ Laundry costs $1.75 wash, $1.75 dry, app-based. On noise: moderate; the building
      Milestone 5. -->
 
 **1.**
+I asked claude to help me understand the chunking function, and suggest me a better alternative. It came up with a very complex structure-aware chunking algorithm. I am still very new to this and understanding things slowly, so I asked claude to suggest me a little better alternative to fixed chunking, it came up with paragraph level chunking by keeping chunk size to an upper limit. I was able to understand the code and make sense of it in all the corpus.
 
 **2.**
+I used claude to build structured table for the run_eval.py output. Also for the criteria.md - I ran my ideas through claude and asked to find out the issues in the current criteria. It helped me in identifyling that I should have a stronger why for each criteria.
 
 <!-- ── Stretch features ─────────────────────────────────────────────────────
      Doing one? Say so here BEFORE you start. A feature this README never
