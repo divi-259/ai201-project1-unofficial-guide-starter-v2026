@@ -23,6 +23,7 @@ For at least 4 of my 5 test questions, the retrieved chunks include one that
 contains the answer.
 
 **Why this target:**
+There could be questions which could be answered from 2 or more documents, and the model may fail to answer correctly.
 <!-- e.g. "One of my questions is about a topic only two documents mention, so
      I expect that one to be hard." -->
 
@@ -33,6 +34,7 @@ contains the answer.
 Every answer the system produces names at least one source document.
 
 **Why this target:**
+Every model call has to follow the grounding insturction which makes sure model cites it's sources.
 <!-- Why all five and not four? What about your setup makes that achievable —
      or what would have to go wrong for it not to be? -->
 
@@ -50,12 +52,16 @@ in at least 4 of 5 tries.
      just keep five of them, or the "4 of 5" above has nothing to be 4 of. -->
 
 **Why this target:**
+The questions which have answers in the corpus have best distances in range 0.3 to 0.4 and the out of scope questions are really far
+away with distances 0.8 and above. So we can safely say that system will answer correctly for the out of scope questions.
 <!-- What did your distances look like when you set the cutoff in Milestone 4?
      Was there a clean gap, or did the two groups overlap? -->
 
 ---
 
 ## 4. Something about your chunks
+
+All chunks will start and end on a sentence boundary, with no sentence cut in half.
 
 <!-- YOU WRITE THIS ONE.
 
@@ -73,11 +79,19 @@ in at least 4 of 5 tries.
 
 **Why this target:**
 
-
+The corpus has small sentences and chunking them on the basis of paragraphs will make sure that no sentence is cut in half
 
 ---
 
 ## 5. Your choice
+
+In at least 4 of 5 answers, every factual claim can be traced to a retrieved chunk.
+
+**Why this target:**
+I want to make sure that the resulted chunks are as close as possible to the question that is asked by the user. There is 
+a possibility that in some cases the answer should be derived from two documents and model might not get the correct answer in
+either of them.
+
 
 <!-- YOU WRITE THIS ONE TOO.
 
@@ -86,12 +100,6 @@ in at least 4 of 5 tries.
      handles badly, about source attribution being correct rather than merely
      present — anything, as long as it names a number or an observable
      outcome. -->
-
-
-
-**Why this target:**
-
-
 
 ---
 
