@@ -302,11 +302,12 @@ fabricated.
 
 | # | Criterion | Verdict | How I decided |
 |---|---|---|---|
-| 1 |  |  |  |
-| 2 |  |  |  |
-| 3 |  |  |  |
-| 4 |  |  |  |
-| 5 |  |  |  |
+| 1 | Retrieved chunk contains the answer | MISS | Runs came out 4 of 5, 3 of 5, 4 of 5 — target is 4 of 5 every time, and Run 2 dropped below it, so the target doesn't hold. |
+| 2 | Every answer names a source | MET | 5 of 5 in all three runs — all 15 generated answers (5 questions × 3 runs) named at least one source file. |
+| 3 | Gate stops out-of-corpus questions | MET | 5 of 5, deterministic — the gate refused every out-of-scope question, above the 4 of 5 target with no run-to-run variation to worry about. |
+| 4 | Chunks start and end on a sentence boundary | MET | 5 of 5 sampled chunks open on a heading and close on a period, verified against the source documents in `corpora/campus_life/documents/` — deterministic since chunking doesn't change between runs. |
+| 5 | Every factual claim traces to a retrieved chunk | MET | 5 of 5 in all three runs — every claim in each answer matched text found verbatim in its cited source document. |
+
 
 ## Diagnoses
 
