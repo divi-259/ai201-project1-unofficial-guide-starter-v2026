@@ -43,9 +43,6 @@ The effect differs across the corpus:
 - **campus_life**: These documents are short and made up of small paragraphs, so each document typically becomes a single chunk.
 - **city_guides**: These documents have long paragraphs, so each paragraph typically becomes its own chunk.
 
-**Chunk size:**
-**Overlap:**
-
 <!-- What about YOUR documents made you pick these numbers? Short posts and
      long sectioned guides don't want the same chunking, and "800 seemed
      reasonable" earns nothing. Point at something you noticed when you read
