@@ -219,15 +219,75 @@ I used claude to build structured table for the run_eval.py output. Also for the
 
 | Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
 |---|---|---|---|---|---|
-| 1. Retrieved chunk contains the answer | 4 of 5 |  |  |  |  |
-| 2. Every answer names a source | 5 of 5 |  |  |  |  |
-| 3. Gate stops out-of-corpus questions | 4 of 5 |  |  |  |  |
-| 4. | | | | | |
-| 5. | | | | | |
+| 1. Retrieved chunk contains the answer | 4 of 5 | 4 of 5 | 3 of 5 | 4 of 5 | MISS |
+| 2. Every answer names a source | 5 of 5 | 5 of 5 | 5 of 5 | 5 of 5 | MET |
+| 3. Gate stops out-of-corpus questions | 4 of 5 | 5 of 5 | 5 of 5 | 5 of 5 | MET |
+| 4. Chunks start and end on a sentence boundary | 5 of 5 | 5 of 5 | 5 of 5 | 5 of 5 | MET |
+| 5. Every factual claim traces to a retrieved chunk | 4 of 5 | 5 of 5 | 5 of 5 | 5 of 5 | MET |
 
 <!-- Underneath, paste the REAL output for each criterion from one of your
      runs — the actual text your system produced, not a description of it.
      Name the file and function that produced it. -->
+
+**Criterion 1 evidence**
+
+```
+Question: How do I book a study room?
+Run 1 answer: "You can book a group study room through the library site up
+to two weeks ahead in two-hour blocks, with a maximum of two blocks per
+person per week (study_group_rooms.txt)."
+expects: "two hour blocks" → not found (answer says "two-hour blocks") → fail
+```
+
+**Criterion 2 evidence** 
+
+```
+Question: What are the graduation requirements? — run 1
+"Based on the provided documents, the graduation requirements are 120
+credit hours, a completed major, general education requirements, and two
+writing-intensive courses taken in different departments.
+
+Source: admin_graduation_requirements.txt"
+```
+
+**Criterion 3 evidence** 
+
+```
+What is the capital of Mongolia? — best distance 0.825 — refused
+How do I change the oil in a diesel engine? — best distance 0.934 — refused
+```
+
+**Criterion 4 evidence** 
+
+```
+BIOL 160 Cell Biology
+
+I lived here my sophomore year. Format is lecture three times a week with a weekly lab. Assessment: four unit tests and a cumulative final. Not curved.
+
+Expect 9 to 11 hours a week, the heaviest first-year course by reputation.
+
+The one piece of advice: the unit tests come fast, roughly every three weeks; falling behind once is very hard to recover from.
+```
+
+Chunk opens on the document's first line and closes on a period - no sentence is split.
+
+**Criterion 5 evidence** 
+
+```
+Question: What are the walking times across campus? — run 1
+Answer: "Aldridge Hall to the science quad: 4 minutes. Fenwick Court to
+central campus: 18 minutes. Morrow House to Kestrel Commons: 7 minutes.
+Library to Ridgeway Café: 3 minutes. Additionally, you should add four
+minutes in winter because the path past the pond ices over."
+
+transit_walking.txt: "Aldridge Hall to the science quad: 4 minutes. Fenwick
+Court to central campus: 18 minutes. Morrow House to Kestrel Commons: 7
+minutes. Library to Ridgeway Café: 3 minutes. Add four minutes in winter.
+The path past the pond genuinely ices over..."
+
+Every number and claim in the answer matches the source document — nothing
+fabricated.
+```
 
 ## Verdicts
 
