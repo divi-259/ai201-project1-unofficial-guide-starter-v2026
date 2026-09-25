@@ -386,6 +386,7 @@ Yes. Criterion 1 was a repeatable MISS before (4, 3, 4 of 5) because `judge()` d
      not.
 
      Milestone 5. -->
+There is some scope of improvement in scorer.py judge function. I can tighten the function by taking the time/number formatting in consideration but this could lead to false positives as it's just a specific case. 
 
 ## What I'd Do Differently
 
@@ -393,3 +394,4 @@ Yes. Criterion 1 was a repeatable MISS before (4, 3, 4 of 5) because `judge()` d
      differently, and why?
 
      Milestone 5. -->
+Criteria 1 - as this was a fuzzy case and we care more about sematic correctness of the answer. 
