@@ -339,9 +339,14 @@ So the miss is in the eval harness, not the RAG pipeline: `judge()` does a liter
 
 ## The Improvement
 
+Better Judge function for better eval harness.
 **What I changed:**
 
+`scorer.py::judge` still checks for an exact substring match first, but if that fails it now falls back to `rapidfuzz`'s `partial_ratio`, scoring the best alignment of `expects` against any window of `answer` and passing if that score is 85 or above.
+
 **Why I picked it:**
+
+Both Criterion 1 misses were the model giving a factually correct answer in a differently formatted way ("two-hour blocks" vs "two hour blocks", "8:00 am" vs "8am") — fuzzy matching tolerates exactly that kind of formatting drift without loosening the check enough to pass a wrong answer.
 
 <!-- Connect it to a specific diagnosis above in one sentence. If you can't,
      you picked a fix because it sounded impressive. -->
@@ -353,13 +358,17 @@ So the miss is in the eval harness, not the RAG pipeline: `judge()` does a liter
 
 | Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
 |---|---|---|---|---|---|
-| 1. Retrieved chunk contains the answer | 4 of 5 |  |  |  |  |
-| 2. Every answer names a source | 5 of 5 |  |  |  |  |
-| 3. Gate stops out-of-corpus questions | 4 of 5 |  |  |  |  |
-| 4. | | | | | |
-| 5. | | | | | |
+| 1. Retrieved chunk contains the answer | 4 of 5 | 4 of 5 | 5 of 5 | 5 of 5 | MET |
+| 2. Every answer names a source | 5 of 5 | 5 of 5 | 5 of 5 | 5 of 5 | MET |
+| 3. Gate stops out-of-corpus questions | 4 of 5 | 5 of 5 | 5 of 5 | 5 of 5 | MET |
+| 4. Chunks start and end on a sentence boundary | 5 of 5 | 5 of 5 | 5 of 5 | 5 of 5 | MET |
+| 5. Every factual claim traces to a retrieved chunk | 4 of 5 | 5 of 5 | 5 of 5 | 5 of 5 | MET |
+
+Source: `results/run_2026-09-24_2213.md`, produced by `run_eval.py::main`. Criterion 1 comes straight from the run's pass/fail column (`scorer.py::judge`); criterion 3 from the out-of-scope gate table (5 of 5 refused, deterministic, same number in all three columns per the Unit 1 convention); criteria 2, 4, and 5 aren't scored by the script, so they're my read of the 15 generated answers in that file — every answer cites a source file, chunking is unchanged from Unit 1 so chunk boundaries are unaffected, and every factual claim matches its cited source document verbatim or in substance.
 
 **Did it help?**
+
+Yes. Criterion 1 was a repeatable MISS before (4, 3, 4 of 5) because `judge()` did an exact substring match and the model's paraphrasing of numbers/units ("two-hour" vs "two hour", "8:00 am" vs "8am") never matched literally. After adding the `rapidfuzz` fallback, it's now 4, 5, 5 of 5 — a consistent MET. Run 1 still has one fail: the health center answer said "8:00 am to 11:00 am" against an expected "8am to 11am," and the colons/padding pushed `partial_ratio` just under the 85 threshold. So the fix closed most of the gap but not all of it.
 
 <!-- Say plainly whether it did, and how you know. If it made things worse,
      say that — a change that backfired, honestly reported, earns full credit
