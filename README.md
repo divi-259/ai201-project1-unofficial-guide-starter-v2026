@@ -328,6 +328,14 @@ fabricated.
      low, and which one you'd tighten and to what.
 
      Milestone 3. -->
+**Criterion 1 — Retrieved chunk contains the answer (MISS: 4 of 5, 3 of 5, 4 of 5)**
+
+Both failing questions trace to the same mechanism, and it isn't any of the five pipeline stages — loading, chunking, embedding, retrieval, and generation all did their job correctly in every run.
+
+- *How do I book a study room?* fails in all 3 runs. The answer consistently says "two-hour blocks" (hyphenated); `questions.py` expects "two hour blocks" (no hyphen). The right chunk was retrieved from `study_group_rooms.txt` and the answer is factually correct — the model just doesn't spell it the way the judge is looking for.
+- *What are the hours for the health center?* fails only in Run 2, where the answer says "8:00 am to 11:00 am" instead of "8am to 11am." Same content, different formatting, and again `scorer.py::judge`'s exact substring match doesn't tolerate it.
+
+So the miss is in the eval harness, not the RAG pipeline: `judge()` does a literal substring check, and it breaks whenever the model paraphrases a number or unit in a way that's still correct. Run 2 dips to 3 of 5 instead of Run 1/3's 4 of 5 simply because the model happened to reformat two things instead of one that time, a scoring artifact, not a worse run.
 
 ## The Improvement
 
