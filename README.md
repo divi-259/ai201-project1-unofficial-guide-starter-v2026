@@ -1,19 +1,6 @@
 # The Unofficial Guide
 
-<!-- Replace this line with your name and which corpus you picked. -->
-
-> **This file is your submission.** Fill it in as you go — most sections get
-> written during the milestone that produces them, not at the end.
->
-> How the starter works, and every command you'll need, is in `RUNNING.md`.
-> Leave that file alone.
->
-> **Paste everything as text.** No screenshots, no video. A typed table gets
-> full credit; a picture of the same table gets none.
->
-> Delete these instruction blocks as you replace them. The `<!-- -->` comments
-> are notes to you and don't show up when the page renders — you can leave them
-> or remove them.
+**Divyanshi** — corpus: `campus_life`
 
 ---
 
@@ -150,30 +137,22 @@ Sources retrieved: admin_graduation_requirements.txt, admin_study_abroad.txt, co
 
      Milestone 4. -->
 
-┌─────────────────────────────────────────────────────────────┬────────────┬───────────────┐
-│                          Question                           │ In corpus? │ Best distance │
-├─────────────────────────────────────────────────────────────┼────────────┼───────────────┤
-│ How do I book a study room?                                 │ Yes        │ 0.337         │
-├─────────────────────────────────────────────────────────────┼────────────┼───────────────┤
-│ What is the assessment criteria for BIOL160?                │ Yes        │ 0.401         │
-├─────────────────────────────────────────────────────────────┼────────────┼───────────────┤
-│ What are the graduation requirements?                       │ Yes        │ 0.327         │
-├─────────────────────────────────────────────────────────────┼────────────┼───────────────┤
-│ What are the hours for the health center?                   │ Yes        │ 0.318         │
-├─────────────────────────────────────────────────────────────┼────────────┼───────────────┤
-│ What are the walking times across campus?                   │ Yes        │ 0.331         │
-├─────────────────────────────────────────────────────────────┼────────────┼───────────────┤
-│ What is the capital of Mongolia?                            │ No         │ 0.825         │
-├─────────────────────────────────────────────────────────────┼────────────┼───────────────┤
-│ How do I change the oil in a diesel engine?                 │ No         │ 0.934         │
-├─────────────────────────────────────────────────────────────┼────────────┼───────────────┤
-│ Who won the 1994 World Cup?                                 │ No         │ 0.886         │
-├─────────────────────────────────────────────────────────────┼────────────┼───────────────┤
-│ What is the recommended dosage of ibuprofen for a headache? │ No         │ 0.844         │
-├─────────────────────────────────────────────────────────────┼────────────┼───────────────┤
-│ How do I write a for loop in Rust?                          │ No         │ 0.896         │
-└─────────────────────────────────────────────────────────────┴────────────┴─────────-------
-In corpus questions have max best distance 0.4 and out of corpus questions have best distance greater than 0.8
+`THRESHOLD = 0.6` in `config.py`.
+
+| Question | In corpus? | Best distance |
+|---|---|---|
+| How do I book a study room? | Yes | 0.337 |
+| What is the assessment criteria for BIOL160? | Yes | 0.401 |
+| What are the graduation requirements? | Yes | 0.327 |
+| What are the hours for the health center? | Yes | 0.318 |
+| What are the walking times across campus? | Yes | 0.331 |
+| What is the capital of Mongolia? | No | 0.825 |
+| How do I change the oil in a diesel engine? | No | 0.934 |
+| Who won the 1994 World Cup? | No | 0.886 |
+| What is the recommended dosage of ibuprofen for a headache? | No | 0.844 |
+| How do I write a for loop in Rust? | No | 0.896 |
+
+In-corpus questions topped out at 0.401 and out-of-corpus questions started at 0.825, so there is a wide gap between roughly 0.4 and 0.8. A cutoff of 0.6 sits in the middle of that gap, leaving room on both sides.
 
 ## How I Used AI
 
@@ -395,3 +374,40 @@ There is some scope of improvement in scorer.py judge function. I can tighten th
 
      Milestone 5. -->
 Criteria 1 - as this was a fuzzy case and we care more about sematic correctness of the answer. 
+
+# Capstone
+
+## System
+
+I'm extending **Project 1, The Unofficial Guide**: the RAG pipeline over the `campus_life` corpus described in Units 1 and 2 above.
+
+## Shape: A, Deploy and instrument
+
+Right now the Unofficial Guide only runs on my laptop, through `app.py` on the command line. For the capstone I'll put it on a host where it runs on its own behind `serve.py` (`POST /ask`, `GET /health`). I'll also add structured logging and measurement around each request, so I can see what the deployed system is doing without opening my editor.
+
+## Run path: A, Hosted
+
+The system will run at a public URL. Details to fill in once deployed:
+
+- **URL:** _TODO_
+- **Platform:** _TODO_
+- **Start command:** `gunicorn serve:app` (the host sets `PORT`, and `serve.py` binds `0.0.0.0`)
+- **Build step:** `pip install -r requirements.txt && python app.py index`. `chroma_db/` is gitignored and hosts don't keep a disk across restarts, so the index has to be built during deploy.
+- **Environment variables:** `GEMINI_API_KEY` (set in the host's dashboard, never committed). `AI201_DEBUG` stays unset.
+- **Check it's up:** `curl <URL>/health` should return `"index_ready": true`.
+- **Ask a question:**
+  ```bash
+  curl -X POST <URL>/ask \
+    -H 'Content-Type: application/json' \
+    -d '{"question": "How do I book a study room?"}'
+  ```
+- **Run it locally the same way:** _TODO: the Path B steps (fresh clone → install → index → serve)_
+
+## Instrumentation
+
+_TODO: what gets logged per request (e.g. question, refused, best distance, sources, latency, tokens), where the logs go, and what I measured from them._
+
+## Out of scope
+
+1. Rebuilding the interface. The system stays a JSON API.
+2. Changing the retrieval logic. Chunking, embeddings, the relevance gate and the 0.6 cutoff stay as they were at the end of Unit 2.
